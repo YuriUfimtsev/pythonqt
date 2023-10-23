@@ -41,6 +41,7 @@
 
 
 #include "codemodel.h"
+#include "qdebug.h"
 
 // ---------------------------------------------------------------------------
 CodeModel::CodeModel()
@@ -300,12 +301,30 @@ void _CodeModelItem::setScope(const QStringList &scope)
 
 QString _CodeModelItem::fileName() const
 {
-  return _M_fileName;
+  auto s = _M_fileName_;
+  s.detach();
+  return s;
 }
-
+volatile int x;
 void _CodeModelItem::setFileName(const QString &fileName)
 {
-  _M_fileName = fileName;
+  auto fileName_ = fileName;
+  fileName_.detach();
+  static const void * that = 0;
+  if (this == that) {
+    qFatal("Die here");
+  }
+  if (name() == "QList") { //, Qt::CaseSensitivity::CaseInsensitive) && _M_kind == Kind_Class /* && !_M_fileName_.isEmpty()*/)) {
+    x = 1;
+    qDebug() << "FILENAME " << _M_name << fileName;
+    qDebug() << "THIS-THIS" << this << (const void *)fileName_.constData();
+    that = this;
+  }
+  if (name().isEmpty() && fileName_.contains("qevent.h")) {
+    qWarning("Die here");
+    qWarning() << this << (const void *)fileName_.constData();
+  }
+  _M_fileName_ = fileName_;
 }
 
 FileModelItem _CodeModelItem::file() const

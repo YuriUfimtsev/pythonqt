@@ -66,11 +66,11 @@ contains(PKGCONFIG, "python.*"){
   # set PYTHON_LIB  = c:\yourDir\Python-2.6.1\PCbuild8\Win32
 
   # check if debug or release
-  CONFIG(debug, debug|release) {
-    DEBUG_EXT = _d 
-  } else {
-    DEBUG_EXT = 
-  }
+  # CONFIG(debug, debug|release) {
+  #   DEBUG_EXT = _d
+  # } else {
+  #   DEBUG_EXT =
+  # }
 
   isEmpty(PYTHON_PATH):PYTHON_PATH=$(PYTHON_PATH)
   isEmpty(PYTHON_PATH)|!exists("$$PYTHON_PATH\\include") | !exists("$$PYTHON_PATH\\libs\\") {

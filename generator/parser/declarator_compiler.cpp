@@ -79,6 +79,8 @@ void DeclaratorCompiler::run(DeclaratorAST *node)
       name_cc.run(decl->id);
       _M_id = name_cc.name();
       _M_function = (node->parameter_declaration_clause != 0);
+      if (_M_function)
+        auto p = 7;
       if (node->parameter_declaration_clause && node->parameter_declaration_clause->ellipsis)
         _M_variadics = true;
 

@@ -31,6 +31,10 @@ gcc|win32-clang-msvc:QMAKE_CXXFLAGS += -Wno-deprecated-declarations -pedantic -a
 clang|win32-clang-msvc: QMAKE_CXXFLAGS += -Wno-nested-anon-types -Wno-gnu-anonymous-struct -Wno-unused-private-field
 win32-clang-msvc:QMAKE_CXXFLAGS += -Wno-language-extension-token -Wno-microsoft-enum-value
 
+sanitize_undefined {
+  QMAKE_CXXFLAGS += -fsanitize-undefined-trap-on-error
+  QMAKE_LFLAGS += -fsanitize-undefined-trap-on-error
+ }
 
 # Input
 HEADERS += \

@@ -45,6 +45,7 @@
 
 #include "codemodel_fwd.h"
 #include <codemodel_pointer.h>
+#include "qdebug.h"
 
 #include <QtCore/QHash>
 #include <QtCore/QList>
@@ -107,6 +108,7 @@ public:
 
   void addFile(FileModelItem item);
   void removeFile(FileModelItem item);
+  int getCreationId() { return _M_creation_id; }
   FileModelItem findFile(const QString &name) const;
   QHash<QString, FileModelItem> fileMap() const;
 
@@ -255,7 +257,7 @@ private:
   int _M_endColumn;
   std::size_t _M_creation_id;
   QString _M_name;
-  QString _M_fileName;
+  QString _M_fileName_;
   QStringList _M_scope;
 
 private:
@@ -357,7 +359,12 @@ public:
 
 protected:
   _ClassModelItem(CodeModel *model, int kind = __node_kind)
-    : _ScopeModelItem(model, kind), _M_classType(CodeModel::Class) {}
+    : _ScopeModelItem(model, kind), _M_classType(CodeModel::Class)
+    {
+    if (model->getCreationId() == 30382) {
+         qDebug() << "NewClassModelItemObj" << this << model->getCreationId() << " \n";
+    }
+  }
 
 private:
   QStringList _M_baseClasses;

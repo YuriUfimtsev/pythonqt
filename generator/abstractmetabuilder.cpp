@@ -412,7 +412,7 @@ bool AbstractMetaBuilder::build()
 
     CodeModel model;
     Binder binder(&model, p.location());
-    m_dom = binder.run(ast);
+    m_dom = binder.run(ast); //bad: qtgui/qevent.h for qlist class model item
 
     pushScope(model_dynamic_cast<ScopeModelItem>(m_dom));
 
@@ -690,6 +690,9 @@ AbstractMetaClass *AbstractMetaBuilder::traverseNamespace(NamespaceModelItem nam
 
     if (!type->include().isValid()) {
         QFileInfo info(namespace_item->fileName());
+        if (namespace_name == "QList") {
+            auto p = 6;
+        }
         type->setInclude(Include(Include::IncludePath, info.fileName()));
     }
 
@@ -1016,6 +1019,9 @@ AbstractMetaClass *AbstractMetaBuilder::traverseTypeAlias(TypeAliasModelItem typ
     // Set the default include file name
     if (!type->include().isValid()) {
         QFileInfo info(typeAlias->fileName());
+        if (full_class_name == "QList") {
+            auto p = 6;
+        }
         type->setInclude(Include(Include::IncludePath, info.fileName()));
     }
 
@@ -1128,6 +1134,10 @@ AbstractMetaClass *AbstractMetaBuilder::traverseClass(ClassModelItem class_item)
     // Set the default include file name
     if (!type->include().isValid()) {
         QFileInfo info(class_item->fileName());
+        if (full_class_name == "QList") {
+            qDebug() << "THAT-THAT" << &*class_item << class_item->fileName().constData() << class_item->fileName();
+            auto p = 6;
+        }
         type->setInclude(Include(Include::IncludePath, info.fileName()));
     }
 

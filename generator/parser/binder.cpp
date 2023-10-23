@@ -175,7 +175,7 @@ CodeModel::ClassType Binder::decode_class_type(std::size_t index) const
       case Token_union:
         return CodeModel::Union;
       default:
-        warnHere();
+        warnHere(index);
         std::cerr << "** WARNING unrecognized class type" << std::endl;
     }
     return CodeModel::Class;
@@ -255,7 +255,7 @@ void Binder::declare_symbol(SimpleDeclarationAST *node, InitDeclaratorAST *init_
   NameAST *id = declarator->id;
   if (! declarator->id)
     {
-      warnHere();
+      warnHere(declarator->start_token, declarator->end_token);
       std::cerr << "** WARNING expected a declarator id" << std::endl;
       return;
     }
@@ -265,7 +265,7 @@ void Binder::declare_symbol(SimpleDeclarationAST *node, InitDeclaratorAST *init_
   if (! symbolScope)
     {
       name_cc.run(id);
-      warnHere();
+      warnHere(declarator->start_token, declarator->end_token);
       std::cerr << "** WARNING scope not found for symbol: "
                 << qPrintable(name_cc.name()) << std::endl;
       return;
@@ -310,7 +310,7 @@ void Binder::declare_symbol(SimpleDeclarationAST *node, InitDeclaratorAST *init_
                                                          declarator,
                                                          this);
 
-      fun->setType(qualifyType(typeInfo, symbolScope->qualifiedName()));
+       fun->setType(qualifyType(typeInfo, symbolScope->qualifiedName()));
 
 
       fun->setVariadics (decl_cc.isVariadics ());
@@ -327,8 +327,8 @@ void Binder::declare_symbol(SimpleDeclarationAST *node, InitDeclaratorAST *init_
           fun->addArgument(arg);
         }
 
-      fun->setScope(symbolScope->qualifiedName());
-      symbolScope->addFunction(fun);
+       fun->setScope(symbolScope->qualifiedName());
+       symbolScope->addFunction(fun);
     }
   else
     {
@@ -354,7 +354,7 @@ void Binder::declare_symbol(SimpleDeclarationAST *node, InitDeclaratorAST *init_
       applyStorageSpecifiers(node->storage_specifiers, model_static_cast<MemberModelItem>(var));
 
       var->setScope(symbolScope->qualifiedName());
-      symbolScope->addVariable(var);
+       symbolScope->addVariable(var);
     }
 }
 
@@ -371,11 +371,12 @@ void Binder::visitFunctionDefinition(FunctionDefinitionAST *node)
   // skip to the inner most.  This is in line with how the declarator
   // node is generated in 'parser.cpp'
   while (declarator && declarator->sub_declarator)
-      declarator = declarator->sub_declarator;
+    declarator = declarator->sub_declarator;
   //Q_ASSERT(declarator->id);
+
   if (!declarator->id) {
-    warnHere();
-    std::cerr << "** SHIT " << qPrintable(name_cc.name()) << std::endl
+    warnHere(declarator->start_token, declarator->end_token);
+    std::cerr << "** SHIT" << std::endl
       << "\tdefinition *ignored*"
       << std::endl;
     return;
@@ -385,7 +386,7 @@ void Binder::visitFunctionDefinition(FunctionDefinitionAST *node)
   ScopeModelItem functionScope = finder.resolveScope(declarator->id, scope);
   if (! functionScope)
     {
-      warnHere();
+      warnHere(declarator->start_token, declarator->end_token);
       name_cc.run(declarator->id);
       std::cerr << "** WARNING scope not found for function definition: "
                 << qPrintable(name_cc.name()) << std::endl
@@ -571,7 +572,7 @@ void Binder::visitTypedef(TypedefAST *node)
 
       if (alias_name.isEmpty ())
         {
-          warnHere();
+          warnHere(init_declarator->start_token, init_declarator->end_token);
           std::cerr << "** WARNING anonymous typedef not supported! ``";
           Token const &tk = _M_token_stream->token ((int) node->start_token);
           Token const &end_tk = _M_token_stream->token ((int) node->end_token);
@@ -682,12 +683,16 @@ void Binder::visitClassSpecifier(ClassSpecifierAST *node)
     }
 
   Q_ASSERT(node->name != 0 && node->name->unqualified_name != 0);
-
+    if (class_cc.name() == "QList" ||class_cc.name() == "QList<T>") {
+      auto r = 5;
+    }
   ScopeModelItem scope = currentScope();
 
   ClassModelItem old = changeCurrentClass(_M_model->create<ClassModelItem>());
-  updateItemPosition (_M_current_class->toItem(), node);
+
   _M_current_class->setName(class_cc.name());
+  updateItemPosition (_M_current_class->toItem(), node);
+  // _M_current_class->setName(class_cc.name());
 
   QStringList baseClasses = class_cc.baseClasses(); TypeInfo info;
   for (int i=0; i<baseClasses.size(); ++i)
@@ -837,14 +842,25 @@ void Binder::visitQProperty(QPropertyAST *node)
     _M_current_class->addPropertyDeclaration(property);
 }
 
-void Binder::warnHere() const
+void Binder::warnHere(int startToken, int endToken) const
 {
-  ScopeModelItem scope = currentScope();
-  QString fileName = scope ? scope->fileName() : QString("<unknown>");
-  if (fileName != _M_lastWarnedFile) {
-    _M_lastWarnedFile = fileName;
-    std::cerr << "In file " << fileName.toLatin1().constData() << ":" << std::endl;
+  int startLine, endLine;
+  int startColumn, endColumn;
+  QString firstFileName, secondFileName;
+  _M_location.positionAt(_M_token_stream->position(startToken), &startLine, &startColumn, &firstFileName);
+  _M_location.positionAt(_M_token_stream->position(endToken == -1 ? startToken : endToken),
+                         &endLine,
+                         &endColumn,
+                         &secondFileName);
+
+  assert (firstFileName == secondFileName);
+  if (firstFileName != _M_lastWarnedFile)
+  {
+    _M_lastWarnedFile = firstFileName;
+    std::cerr << std::endl << "In file " << firstFileName.toLatin1().constData() << ":" << std::endl;
   }
+
+  std::cerr << "lines " << std::to_string(startLine) << "-" << std::to_string(endLine) << std::endl;
 }
 
 void Binder::applyStorageSpecifiers(const ListNode<std::size_t> *it, MemberModelItem item)
