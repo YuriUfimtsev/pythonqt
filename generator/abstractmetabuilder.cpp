@@ -1134,7 +1134,7 @@ AbstractMetaClass *AbstractMetaBuilder::traverseClass(ClassModelItem class_item)
     // Set the default include file name
     if (!type->include().isValid()) {
         QFileInfo info(class_item->fileName());
-        if (full_class_name == "QList") {
+        if (class_item->name() == "QList") {
             qDebug() << "THAT-THAT" << &*class_item << class_item->fileName().constData() << class_item->fileName();
             auto p = 6;
         }

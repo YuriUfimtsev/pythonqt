@@ -301,7 +301,7 @@ void _CodeModelItem::setScope(const QStringList &scope)
 
 QString _CodeModelItem::fileName() const
 {
-  auto s = _M_fileName_;
+  auto s = _M_fileName;
   s.detach();
   return s;
 }
@@ -314,7 +314,7 @@ void _CodeModelItem::setFileName(const QString &fileName)
   if (this == that) {
     qFatal("Die here");
   }
-  if (name() == "QList") { //, Qt::CaseSensitivity::CaseInsensitive) && _M_kind == Kind_Class /* && !_M_fileName_.isEmpty()*/)) {
+  if (name() == "QList") { //, Qt::CaseSensitivity::CaseInsensitive) && _M_kind == Kind_Class /* && !_M_fileName.isEmpty()*/)) {
     x = 1;
     qDebug() << "FILENAME " << _M_name << fileName;
     qDebug() << "THIS-THIS" << this << (const void *)fileName_.constData();
@@ -324,7 +324,7 @@ void _CodeModelItem::setFileName(const QString &fileName)
     qWarning("Die here");
     qWarning() << this << (const void *)fileName_.constData();
   }
-  _M_fileName_ = fileName_;
+  _M_fileName = fileName_;
 }
 
 FileModelItem _CodeModelItem::file() const

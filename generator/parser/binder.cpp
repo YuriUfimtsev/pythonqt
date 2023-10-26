@@ -310,7 +310,7 @@ void Binder::declare_symbol(SimpleDeclarationAST *node, InitDeclaratorAST *init_
                                                          declarator,
                                                          this);
 
-       fun->setType(qualifyType(typeInfo, symbolScope->qualifiedName()));
+      fun->setType(qualifyType(typeInfo, symbolScope->qualifiedName()));
 
 
       fun->setVariadics (decl_cc.isVariadics ());
@@ -327,8 +327,8 @@ void Binder::declare_symbol(SimpleDeclarationAST *node, InitDeclaratorAST *init_
           fun->addArgument(arg);
         }
 
-       fun->setScope(symbolScope->qualifiedName());
-       symbolScope->addFunction(fun);
+      fun->setScope(symbolScope->qualifiedName());
+      symbolScope->addFunction(fun);
     }
   else
     {
@@ -354,7 +354,7 @@ void Binder::declare_symbol(SimpleDeclarationAST *node, InitDeclaratorAST *init_
       applyStorageSpecifiers(node->storage_specifiers, model_static_cast<MemberModelItem>(var));
 
       var->setScope(symbolScope->qualifiedName());
-       symbolScope->addVariable(var);
+      symbolScope->addVariable(var);
     }
 }
 
@@ -371,9 +371,8 @@ void Binder::visitFunctionDefinition(FunctionDefinitionAST *node)
   // skip to the inner most.  This is in line with how the declarator
   // node is generated in 'parser.cpp'
   while (declarator && declarator->sub_declarator)
-    declarator = declarator->sub_declarator;
+      declarator = declarator->sub_declarator;
   //Q_ASSERT(declarator->id);
-
   if (!declarator->id) {
     warnHere(declarator->start_token, declarator->end_token);
     std::cerr << "** SHIT" << std::endl
@@ -683,7 +682,7 @@ void Binder::visitClassSpecifier(ClassSpecifierAST *node)
     }
 
   Q_ASSERT(node->name != 0 && node->name->unqualified_name != 0);
-    if (class_cc.name() == "QList" ||class_cc.name() == "QList<T>") {
+    if (class_cc.name() == "QList") {
       auto r = 5;
     }
   ScopeModelItem scope = currentScope();
