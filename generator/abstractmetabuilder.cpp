@@ -1697,7 +1697,7 @@ AbstractMetaType *AbstractMetaBuilder::translateType(const TypeInfo &_typei, boo
 
     }
 
-    if (typei.isFunctionPointer()) {
+    if (typei.isFunctionPointer() || typei.isRvalueReference()) { // function pointers or r-value references are not supported
         *ok = false;
         return 0;
     }
