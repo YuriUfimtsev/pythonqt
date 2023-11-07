@@ -119,8 +119,7 @@ jobs:
         qmake-qt5 -r PythonQt.pro CONFIG+=${{ matrix.configuration }} \
           PYTHON_VERSION=$(python${PYTHON_VERSION_SUFFIX} --version | cut -d " " -f 2 | cut -d "." -f1,2) \
           PYTHON_DIR=$(which python${PYTHON_VERSION_SUFFIX} | xargs dirname | xargs dirname)
-        make -j 2           
-        make check TESTARGS="-platform offscreen"
+        make -j 2 && make check TESTARGS="-platform offscreen"
 
     - name: Generate Wrappers
       run: |
