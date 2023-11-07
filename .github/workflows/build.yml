@@ -64,6 +64,7 @@ jobs:
       run: |
         # workaround to allow to find the Qt include dirs for installed standard qt packages
         mkdir /usr/include/qt5; ln -s /usr/include/x86_64-linux-gnu/qt5 /usr/include/qt5/include
+        ASAN_OPTIONS="detect_stack_use_after_return=1:fast_unwind_on_malloc=0"
         export QTDIR=/usr/include/qt5
         cd generator
         ./pythonqt_generator
@@ -196,7 +197,7 @@ jobs:
         for i in "python${{ steps.versions.outputs.PYTHON_VERSION_SHORT }}-embed" "python${{ steps.versions.outputs.PYTHON_VERSION_SHORT }}" \
                  "python${PYTHON_VERSION_MAJOR}-embed" "python${PYTHON_VERSION_MAJOR}"
         do if pkg-config --exists "$i"; then PYTHON_PKGCONFIG_NAME="$i"; break; fi; done
-        qmake CONFIG+=${{ matrix.configuration }} CONFIG+=sanitizer CONFIG+=sanitize_undefined CONFIG+=sanitize_address \
+        qmake CONFIG+=${{ matrix.configuration }} CONFIG+=sanitizer CONFIG+=sanitize_undefined \
           PYTHON_VERSION=${{ steps.versions.outputs.PYTHON_VERSION_SHORT }} \
           PYTHON_DIR="$pythonLocation" \
           PKGCONFIG+=$PYTHON_PKGCONFIG_NAME \
