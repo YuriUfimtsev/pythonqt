@@ -57,7 +57,7 @@ jobs:
         PYTHON_VERSION=$(python3 --version | cut -d " " -f 2 | cut -d "." -f1,2) \
         PYTHON_DIR=$(which python3 | xargs dirname | xargs dirname)
         make -j 2
-        UBSAN_OPTIONS="halt_on_error=1" ASAN_OPTION="detect_leaks=0:detect_stack_user_after_return=1:fast_unwind_on_malloc=0" \
+        UBSAN_OPTIONS="halt_on_error=1" ASAN_OPTIONS="detect_leaks=0:detect_stack_user_after_return=1:fast_unwind_on_malloc=0" \
           make check TESTARGS="-platform offscreen"
       
     - name: Generate Wrappers
@@ -66,8 +66,7 @@ jobs:
         mkdir /usr/include/qt5; ln -s /usr/include/x86_64-linux-gnu/qt5 /usr/include/qt5/include
         export QTDIR=/usr/include/qt5
         cd generator
-        UBSAN_OPTIONS="halt_on_error=1"
-        ASAN_OPTION="detect_leaks=0:detect_stack_user_after_return=1:fast_unwind_on_malloc=0"
+        UBSAN_OPTIONS="halt_on_error=1" ASAN_OPTIONS="detect_leaks=0:detect_stack_user_after_return=1:fast_unwind_on_malloc=0"
         ./pythonqt_generator
 
     - name: Upload Wrappers
@@ -122,7 +121,7 @@ jobs:
           PYTHON_VERSION=$(python${PYTHON_VERSION_SUFFIX} --version | cut -d " " -f 2 | cut -d "." -f1,2) \
           PYTHON_DIR=$(which python${PYTHON_VERSION_SUFFIX} | xargs dirname | xargs dirname)
         make -j 2           
-        UBSAN_OPTIONS="halt_on_error=1" ASAN_OPTION="detect_leaks=0:detect_stack_user_after_return=1:fast_unwind_on_malloc=0" \
+        UBSAN_OPTIONS="halt_on_error=1" ASAN_OPTIONS="detect_leaks=0:detect_stack_user_after_return=1:fast_unwind_on_malloc=0" \
           make check TESTARGS="-platform offscreen"
 
     - name: Generate Wrappers
@@ -131,8 +130,7 @@ jobs:
         mkdir /usr/include/qt5ln; ln -s /usr/include/qt5 /usr/include/qt5ln/include
         export QTDIR=/usr/include/qt5ln
         cd generator
-        UBSAN_OPTIONS="halt_on_error=1"
-        ASAN_OPTION="detect_leaks=0:detect_stack_user_after_return=1:fast_unwind_on_malloc=0"
+        UBSAN_OPTIONS="halt_on_error=1" ASAN_OPTIONS="detect_leaks=0:detect_stack_user_after_return=1:fast_unwind_on_malloc=0"
         ./pythonqt_generator
 
     - name: Upload Wrappers
@@ -209,15 +207,14 @@ jobs:
           PKGCONFIG+=$PYTHON_PKGCONFIG_NAME \
           -r PythonQt.pro
         make -j 2
-        UBSAN_OPTIONS="halt_on_error=1" ASAN_OPTION="detect_leaks=0:detect_stack_user_after_return=1:fast_unwind_on_malloc=0" \
+        UBSAN_OPTIONS="halt_on_error=1" ASAN_OPTIONS="detect_leaks=0:detect_stack_user_after_return=1:fast_unwind_on_malloc=0" \
           make check TESTARGS="-platform offscreen"
 
     - name: Generate Wrappers
       if: ${{ contains(matrix.configuration, 'release') }}
       run: |
         cd generator
-        UBSAN_OPTIONS="halt_on_error=1"
-        ASAN_OPTION="detect_leaks=0:detect_stack_user_after_return=1:fast_unwind_on_malloc=0"
+        UBSAN_OPTIONS="halt_on_error=1" ASAN_OPTIONS="detect_leaks=0:detect_stack_user_after_return=1:fast_unwind_on_malloc=0"
         # workaround to allow to find the Qt include dirs for installed standard qt packages
         QTDIR=-UNDEFINED- ./pythonqt_generator --include-paths=$Qt5_Dir/lib
 
