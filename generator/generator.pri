@@ -36,6 +36,8 @@ sanitize_undefined {
   QMAKE_LFLAGS += -fsanitize-undefined-trap-on-error
  }
 
+CONFIG += sanitize_address
+
 # Input
 HEADERS += \
         $$GENERATORPATH/generator.h \
