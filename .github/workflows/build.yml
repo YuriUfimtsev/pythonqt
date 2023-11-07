@@ -62,9 +62,9 @@ jobs:
       
     - name: Generate Wrappers
       run: |
+        UBSAN_OPTIONS="halt_on_error=1"
         # workaround to allow to find the Qt include dirs for installed standard qt packages
         mkdir /usr/include/qt5; ln -s /usr/include/x86_64-linux-gnu/qt5 /usr/include/qt5/include
-        ASAN_OPTIONS="detect_stack_use_after_return=1:fast_unwind_on_malloc=0"
         export QTDIR=/usr/include/qt5
         cd generator
         ./pythonqt_generator
