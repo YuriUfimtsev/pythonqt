@@ -42,6 +42,7 @@
 
 #include <QtCore/qglobal.h>
 
+#include <iostream>
 #include "tokens.h"
 
 static char const * const _S_token_names[] = {
@@ -256,6 +257,10 @@ static char _S_printable[][2] = {
 
 char const *token_name(int token)
 {
+  if (sizeof(_S_token_names) / sizeof(_S_token_names[0]) != TOKEN_KIND_COUNT)
+    {
+      std::cerr << "** WARNING different number of token kinds" << std::endl;
+    }
   if (token == 0)
     {
       return "eof";
