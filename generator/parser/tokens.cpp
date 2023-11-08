@@ -153,7 +153,8 @@ static char const * const _S_token_names[] = {
   "xor",
   "xor_eq",
   "Q_ENUMS",
-  "Q_ENUM"
+  "Q_ENUM",
+  "Q_INVOKABLE"
 };
 
 static char _S_printable[][2] = {
@@ -257,7 +258,7 @@ static char _S_printable[][2] = {
 
 char const *token_name(int token)
 {
-  if (sizeof(_S_token_names) / sizeof(_S_token_names[0]) != TOKEN_KIND_COUNT)
+  if (sizeof(_S_token_names) / sizeof(_S_token_names[0]) != TOKEN_KIND_COUNT - 1000)
     {
       std::cerr << "** WARNING different number of token kinds" << std::endl;
     }
