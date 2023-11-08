@@ -260,7 +260,7 @@ char const *token_name(int token)
 {
   if (sizeof(_S_token_names) / sizeof(_S_token_names[0]) != TOKEN_KIND_COUNT - 1000)
     {
-      std::cerr << "** WARNING different number of token kinds" << std::endl;
+      std::cerr << "** WARNING enum TOKEN_KIND and _S_token_names are not synchronized" << std::endl;
     }
   if (token == 0)
     {
