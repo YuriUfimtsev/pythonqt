@@ -211,10 +211,9 @@ jobs:
       if: ${{ contains(matrix.configuration, 'release') }}
       run: |
         cd generator
-        export UBSAN_OPTIONS="halt_on_error=1"
-        export ASAN_OPTIONS="detect_leaks=0:detect_stack_use_after_return=1:fast_unwind_on_malloc=0"
         # workaround to allow to find the Qt include dirs for installed standard qt packages
-        QTDIR=-UNDEFINED- ./pythonqt_generator --include-paths=$Qt5_Dir/lib
+        QTDIR=-UNDEFINED- ./pythonqt_generator --include-paths=$Qt5_Dir/lib \
+        UBSAN_OPTIONS="halt_on_error=1" ASAN_OPTIONS="detect_leaks=0:detect_stack_use_after_return=1:fast_unwind_on_malloc=0"
 
     - name: Upload Wrappers
       uses: actions/upload-artifact@v3
