@@ -4,6 +4,7 @@ on:
   push:
     branches: 
       - master
+      - make_generator_work_for_5.15
   pull_request:
       
 defaults:
