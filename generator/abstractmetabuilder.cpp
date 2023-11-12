@@ -46,6 +46,7 @@
 #include "binder.h"
 #include "control.h"
 #include "default_visitor.h"
+#include "dumptree.h"
 #include "lexer.h"
 #include "parser.h"
 #include "tokens.h"
