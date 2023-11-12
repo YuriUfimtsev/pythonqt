@@ -98,6 +98,14 @@ QString AbstractMetaType::cppSignature() const
 }
 
 /*******************************************************************************
+ * AbstractMetaVariable
+ */
+AbstractMetaVariable::~AbstractMetaVariable()
+{
+    delete m_type;
+}
+
+/*******************************************************************************
  * AbstractMetaArgument
  */
 AbstractMetaArgument *AbstractMetaArgument::copy() const
@@ -1313,7 +1321,7 @@ const AbstractMetaFunction *AbstractMetaField::getter() const
         m_getter = createXetter(this,
                                 name(),
                                 AbstractMetaAttributes::GetterFunction);
-        m_getter->setType(type());
+        m_getter->setType(type()->copy());
     }
 
     return m_getter;
