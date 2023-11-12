@@ -153,6 +153,7 @@ AbstractMetaBuilder::AbstractMetaBuilder()
 AbstractMetaBuilder::~AbstractMetaBuilder()
 {
     qDeleteAll(m_meta_classes);
+    qDeleteAll(m_enums);
 }
 
 void AbstractMetaBuilder::checkFunctionModifications()
@@ -1629,6 +1630,7 @@ AbstractMetaFunction *AbstractMetaBuilder::traverseFunction(FunctionModelItem fu
                 UnmatchedArgumentType;
             }
             meta_function->setInvalid(true);
+            qDeleteAll(meta_arguments);
             return meta_function;
         }
         AbstractMetaArgument *meta_argument = createMetaArgument();

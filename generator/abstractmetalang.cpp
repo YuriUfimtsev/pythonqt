@@ -100,10 +100,10 @@ QString AbstractMetaType::cppSignature() const
 /*******************************************************************************
  * AbstractMetaVariable
  */
-AbstractMetaVariable::~AbstractMetaVariable()
-{
-    delete m_type;
-}
+//AbstractMetaVariable::~AbstractMetaVariable()
+//{
+//    delete m_type;
+//}
 
 /*******************************************************************************
  * AbstractMetaArgument

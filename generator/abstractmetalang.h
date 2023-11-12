@@ -311,7 +311,7 @@ class AbstractMetaVariable
 {
 public:
     AbstractMetaVariable() = default;
-    ~AbstractMetaVariable();
+    // ~AbstractMetaVariable();
 
     AbstractMetaType *type() const { return m_type; }
     void setType(AbstractMetaType *type) { m_type = type; }
