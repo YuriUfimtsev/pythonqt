@@ -47,6 +47,14 @@
 /*******************************************************************************
  * AbstractMetaType
  */
+//AbstractMetaType::~AbstractMetaType()
+//{
+//    // delete m_type_entry;
+////    delete m_array_element_type;
+////    delete m_original_template_type;
+////    qDeleteAll(m_instantiations);
+//}
+
 AbstractMetaType *AbstractMetaType::copy() const
 {
     AbstractMetaType *cpy = new AbstractMetaType;
@@ -95,6 +103,14 @@ QString AbstractMetaType::cppSignature() const
             s += '&';
     }
     return s;
+}
+
+/*******************************************************************************
+ * AbstractMetaVariable
+ */
+AbstractMetaVariable::~AbstractMetaVariable()
+{
+    delete m_type;
 }
 
 /*******************************************************************************

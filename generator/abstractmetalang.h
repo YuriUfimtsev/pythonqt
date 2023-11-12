@@ -188,6 +188,7 @@ public:
         m_reserved(0)
     {
     }
+//    ~AbstractMetaType();
 
     QString package() const { return m_type_entry->javaPackage(); }
     QString name() const { return m_type_entry->targetLangName(); }
@@ -311,6 +312,7 @@ class AbstractMetaVariable
 {
 public:
     AbstractMetaVariable() = default;
+    ~AbstractMetaVariable();
 
     AbstractMetaType *type() const { return m_type; }
     void setType(AbstractMetaType *type) { m_type = type; }
