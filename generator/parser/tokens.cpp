@@ -43,6 +43,7 @@
 #include <QtCore/qglobal.h>
 #include <iostream>
 
+#include <iostream>
 #include "tokens.h"
 
 static char const * const _S_token_names[] = {
