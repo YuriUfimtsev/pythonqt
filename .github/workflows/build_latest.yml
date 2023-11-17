@@ -13,7 +13,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        qt-version: [ '5.*' ]
+        qt-version: [ '5.12.*' ]
         python-version: [ '3.12' ]
     runs-on: ubuntu-latest
     steps:
