@@ -1164,6 +1164,9 @@ void AbstractMetaBuilder::traverseFunctions(ScopeModelItem scope_item, AbstractM
                   meta_class->setHasPublicDestructor(false);
                 }
                 meta_class->setHasVirtualDestructor(meta_function->isVirtual());
+                delete meta_function;
+            } else {
+                delete meta_function;
             }
         }
     }

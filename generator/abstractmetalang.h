@@ -600,6 +600,7 @@ class AbstractMetaEnum : public AbstractMetaAttributes
 {
 public:
     AbstractMetaEnum() : m_has_qenums_declaration(false) {}
+    ~AbstractMetaEnum() { qDeleteAll(m_enum_values); }
 
     AbstractMetaEnumValueList values() const { return m_enum_values; }
     void addEnumValue(AbstractMetaEnumValue *enumValue) { m_enum_values << enumValue; }
