@@ -758,6 +758,7 @@ AbstractMetaClass::~AbstractMetaClass()
 {
     qDeleteAll(m_functions);
     qDeleteAll(m_fields);
+    qDeleteAll(m_property_specs);
 }
 
 /*AbstractMetaClass *AbstractMetaClass::copy() const
