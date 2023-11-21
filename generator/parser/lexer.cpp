@@ -44,6 +44,8 @@
 #include "tokens.h"
 #include "control.h"
 
+#include <QDebug>
+
 #include <cctype>
 #include <iostream>
 
@@ -341,8 +343,10 @@ void Lexer::scan_identifier_or_keyword()
   while (isalnum(*skip) || *skip== '_')
     ++skip;
 
-  int n = skip - cursor;
+  volatile int n = skip - cursor;
+  // qDebug() << "skip" << skip << " cursor " << cursor << " n " << n;
   Token *current_token = &token_stream[(int) index];
+  // qDebug() << "index " << index;
   (this->*s_scan_keyword_table[n < 17 ? n : 0])();
 
   if (current_token->kind == Token_identifier)

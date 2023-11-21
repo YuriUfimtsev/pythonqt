@@ -396,6 +396,11 @@ void _ClassModelItem::addPropertyDeclaration(const QString &propertyDeclaration)
 
 
 // ---------------------------------------------------------------------------
+//_ScopeModelItem::~_ScopeModelItem()
+//{
+//    qDeleteAll(_M_typeAliases);
+//}
+
 FunctionModelItem _ScopeModelItem::declaredFunction(FunctionModelItem item)
 {
   FunctionList function_list = findFunctions(item->name());

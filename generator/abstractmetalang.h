@@ -188,6 +188,7 @@ public:
         m_reserved(0)
     {
     }
+    // ~AbstractMetaType() { qDeleteAll(m_instantiations); }
 
     QString package() const { return m_type_entry->javaPackage(); }
     QString name() const { return m_type_entry->targetLangName(); }
