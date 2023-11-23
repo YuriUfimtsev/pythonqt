@@ -1,0 +1,34 @@
+Please wait while source files are being generated...
+Trying to determine Qt version...
+-------------------------------------------------------------
+Using QT at: /home/yuri/qt/5.12.12/gcc_64
+-------------------------------------------------------------
+Determined Qt version is 5.12.12
+Parsing typesystem file [:/trolltech/generator/build_all.txt]
+WARNING(Typesystem) :: Duplicate type entry: 'QUrl::UrlFormattingOption'
+WARNING(Typesystem) :: Duplicate type entry: 'QMultimedia'
+PreProcessing - Generate [.preprocessed.tmp] using [:/trolltech/generator/qtscript_masterinclude.h] and include-paths []
+-------------------------------------------------------------
+Using QT at: /home/yuri/qt/5.12.12/gcc_64
+-------------------------------------------------------------
+../../../pythonqt/generator/parser/lexer.cpp:346:46: runtime error: index 1856299544 out of bounds for type 'scan_fun_ptr [17]'
+../../../pythonqt/generator/parser/lexer.cpp:346:48: runtime error: load of address 0x55f1c5c87c08 with insufficient space for an object of type 'long int'
+0x55f1c5c87c08: note: pointer points here
+<memory cannot be printed>
+AddressSanitizer:DEADLYSIGNAL
+=================================================================
+==9575==ERROR: AddressSanitizer: SEGV on unknown address 0x55f1c5c87c08 (pc 0x55eadb0d8490 bp 0x7ffe6ea4cc40 sp 0x7ffe6ea4cbf0 T0)
+==9575==The signal is caused by a READ memory access.
+    #0 0x55eadb0d8490 in Lexer::scan_identifier_or_keyword() ../../../pythonqt/generator/parser/lexer.cpp:346
+    #1 0x55eadb0d1414 in Lexer::tokenize(char const*, unsigned long) ../../../pythonqt/generator/parser/lexer.cpp:151
+    #2 0x55eadb10f18f in Parser::parse(char const*, unsigned long, pool*) ../../../pythonqt/generator/parser/parser.cpp:116
+    #3 0x55eadb3a901b in AbstractMetaBuilder::build() ../../../pythonqt/generator/abstractmetabuilder.cpp:416
+    #4 0x55eadb4b0190 in GeneratorSetQtScript::buildModel(QString) ../../../pythonqt/generator/generatorsetqtscript.cpp:81
+    #5 0x55eadb2ab9ad in main ../../../pythonqt/generator/main.cpp:227
+    #6 0x7fb1d9629d8f in __libc_start_call_main ../sysdeps/nptl/libc_start_call_main.h:58
+    #7 0x7fb1d9629e3f in __libc_start_main_impl ../csu/libc-start.c:392
+    #8 0x55eadb0cd924 in _start (/home/yuri/src/repos/build/PythonQt_5_12-Debug/generator/pythonqt_generator+0x8f3924)
+
+AddressSanitizer can not provide additional info.
+SUMMARY: AddressSanitizer: SEGV ../../../pythonqt/generator/parser/lexer.cpp:346 in Lexer::scan_identifier_or_keyword()
+==9575==ABORTING
