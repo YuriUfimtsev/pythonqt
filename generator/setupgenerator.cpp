@@ -50,7 +50,6 @@
 void SetupGenerator::addClass(const QString& package, const AbstractMetaClass *cls)
 {
   packHash[package].append(cls);
-  qDebug() << "CLASS " << cls << "\n";
 }
 
 void maybeDeclareMetaType(QTextStream &stream, const QString &typeName,
@@ -299,12 +298,12 @@ void SetupGenerator::generate()
 
       QSet<QString> listRegistration;
       QSet<QString> snips;
-      for (const AbstractMetaClass *cls :  list) {
-        Q_FOREACH(const AbstractMetaFunction* func, cls->functions()) {
+      for (auto cls: list) {
+          for(auto &&func: cls->functions()) {
           if (func->type() && func->type()->isContainer()) {
             addListRegistration(func->type(), listRegistration);
           }
-          Q_FOREACH(const AbstractMetaArgument* arg, func->arguments()) {
+          for(auto &&arg: func->arguments()) {
             if (arg->type() && arg->type()->isContainer()) {
               addListRegistration(arg->type(), listRegistration);
             }
