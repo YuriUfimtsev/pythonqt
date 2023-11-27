@@ -50,6 +50,7 @@
 void SetupGenerator::addClass(const QString& package, const AbstractMetaClass *cls)
 {
   packHash[package].append(cls);
+  qDebug() << "CLASS " << cls << "\n";
 }
 
 void maybeDeclareMetaType(QTextStream &stream, const QString &typeName,
@@ -298,7 +299,12 @@ void SetupGenerator::generate()
 
       QSet<QString> listRegistration;
       QSet<QString> snips;
-      for (auto &&cls :  list) {
+      for (auto &&cls :  list) {////////////////////
+          if (cls->qualifiedCppName() != "5")
+          {
+              auto t = 8;
+              qDebug() << "HaHa";
+          }
         for(auto &&func: cls->functions()) {
           if (func->type() && func->type()->isContainer()) {
             addListRegistration(func->type(), listRegistration);
