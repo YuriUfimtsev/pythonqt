@@ -299,17 +299,12 @@ void SetupGenerator::generate()
 
       QSet<QString> listRegistration;
       QSet<QString> snips;
-      for (auto &&cls :  list) {////////////////////
-          if (cls->qualifiedCppName() != "5")
-          {
-              auto t = 8;
-              qDebug() << "HaHa";
-          }
-        for(auto &&func: cls->functions()) {
+      for (const AbstractMetaClass *cls :  list) {
+        Q_FOREACH(const AbstractMetaFunction* func, cls->functions()) {
           if (func->type() && func->type()->isContainer()) {
             addListRegistration(func->type(), listRegistration);
           }
-          for(auto &&arg: func->arguments()) {
+          Q_FOREACH(const AbstractMetaArgument* arg, func->arguments()) {
             if (arg->type() && arg->type()->isContainer()) {
               addListRegistration(arg->type(), listRegistration);
             }
