@@ -416,8 +416,8 @@ bool AbstractMetaBuilder::build()
 
     TranslationUnitAST *ast = p.parse(contents, contents.size(), &__pool);
 
-    CodeModel model;
-    Binder binder(&model, p.location());
+    CodeModel *model = new CodeModel();
+    Binder binder(model, p.location());
     m_dom = binder.run(ast);
 
     pushScope(model_dynamic_cast<ScopeModelItem>(m_dom));
