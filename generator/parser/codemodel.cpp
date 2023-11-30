@@ -259,6 +259,7 @@ _CodeModelItem::_CodeModelItem(CodeModel *model, int kind)
 
 _CodeModelItem::~_CodeModelItem()
 {
+    delete _M_model;
 }
 
 CodeModelItem _CodeModelItem::toItem() const
@@ -398,10 +399,10 @@ void _ClassModelItem::addPropertyDeclaration(const QString &propertyDeclaration)
 
 
 // ---------------------------------------------------------------------------
-//_ScopeModelItem::~_ScopeModelItem()
-//{
-//    qDeleteAll(_M_typeAliases);
-//}
+_ScopeModelItem::~_ScopeModelItem()
+{
+   qDeleteAll(_M_typeAliases);
+}
 
 FunctionModelItem _ScopeModelItem::declaredFunction(FunctionModelItem item)
 {

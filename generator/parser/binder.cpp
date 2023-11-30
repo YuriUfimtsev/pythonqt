@@ -74,6 +74,7 @@ Binder::Binder(CodeModel *__model, LocationManager &__location, Control *__contr
 
 Binder::~Binder()
 {
+    qDeleteAll(_M_current_template_parameters);
 }
 
 FileModelItem Binder::run(AST *node)
