@@ -312,7 +312,7 @@ class AbstractMetaVariable
 {
 public:
     AbstractMetaVariable() = default;
-    virtual ~AbstractMetaVariable() { delete m_type; }
+    virtual ~AbstractMetaVariable();
 
     AbstractMetaType *type() const { return m_type; }
     void setType(AbstractMetaType *type) { m_type = type; }
