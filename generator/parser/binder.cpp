@@ -74,7 +74,7 @@ Binder::Binder(CodeModel *__model, LocationManager &__location, Control *__contr
 
 Binder::~Binder()
 {
-    qDeleteAll(_M_current_template_parameters);
+  qDeleteAll(_M_current_template_parameters);
 }
 
 FileModelItem Binder::run(AST *node)
@@ -500,7 +500,7 @@ void Binder::visitFunctionDefinition(FunctionDefinitionAST *node)
   // try to find a function declaration for this definition..
   if (! declared)
     {
-      functionScope->addFunction(prototype);
+      functionScope->addFunction(prototype); ////////problem
     }
   else
     {
@@ -647,7 +647,7 @@ void Binder::visitTypedef(TypedefAST *node)
       CodeModelFinder finder(model(), this);
       ScopeModelItem typedefScope = finder.resolveScope(declarator->id, scope);
 
-      TypeAliasModelItem typeAlias = model ()->create<TypeAliasModelItem> ();
+      TypeAliasModelItem typeAlias = model ()->create<TypeAliasModelItem> (); // UNKNOWN LEAK
       updateItemPosition (typeAlias->toItem (), node);
       typeAlias->setName (alias_name);
       typeAlias->setType (qualifyType (typeInfo, currentScope ()->qualifiedName ()));
