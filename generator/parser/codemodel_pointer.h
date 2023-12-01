@@ -124,18 +124,7 @@ private:
 #   if QT_VERSION >= 0x050000
 #       if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
 #           define LOAD loadRelaxed
-    //////////
 #       else
-            ~CodeModelPointer() {
-                auto pointer = this->load();
-                if (pointer != nullptr && typeid(*pointer) != typeid(T)) {
-                    // delete static_cast<*pointer.>(pointer);
-                }
-                else {
-                    delete pointer;
-                }
-                this->store(nullptr);
-            }
 #           define LOAD load
 #       endif
     operator T * () const {
