@@ -190,6 +190,8 @@ public:
     {
     }
 
+    ~AbstractMetaType();
+
     QString package() const { return m_type_entry->javaPackage(); }
     QString name() const { return m_type_entry->targetLangName(); }
     QString fullName() const { return m_type_entry->qualifiedTargetLangName(); }
