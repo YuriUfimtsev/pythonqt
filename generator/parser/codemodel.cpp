@@ -41,6 +41,7 @@
 
 
 #include "codemodel.h"
+#include <QDebug>
 
 // ---------------------------------------------------------------------------
 CodeModel::CodeModel()
@@ -257,7 +258,7 @@ _CodeModelItem::_CodeModelItem(CodeModel *model, int kind)
 
 _CodeModelItem::~_CodeModelItem()
 {
-    delete _M_model;
+    //delete _M_model;
 }
 
 CodeModelItem _CodeModelItem::toItem() const
@@ -399,7 +400,12 @@ void _ClassModelItem::addPropertyDeclaration(const QString &propertyDeclaration)
 // ---------------------------------------------------------------------------
 _ScopeModelItem::~_ScopeModelItem()
 {
-   qDeleteAll(_M_typeAliases);
+    qDebug() << "1!!!!!!!!!!!!";
+    for (auto&& alias: _M_typeAliases.values())
+    {
+        _TypeAliasModelItem::clear(alias);
+        delete alias;
+    }
 }
 
 FunctionModelItem _ScopeModelItem::declaredFunction(FunctionModelItem item)
@@ -878,6 +884,13 @@ TypeAliasModelItem _TypeAliasModelItem::create(CodeModel *model)
 {
   TypeAliasModelItem item(new _TypeAliasModelItem(model));
   return item;
+}
+
+void _TypeAliasModelItem::clear(TypeAliasModelItem item)
+{
+    auto pointer = item.load();
+    delete pointer;
+    item.store(nullptr);
 }
 
 EnumModelItem _EnumModelItem::create(CodeModel *model)

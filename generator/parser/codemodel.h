@@ -650,6 +650,7 @@ public:
   DECLARE_MODEL_NODE(TypeAlias)
 
   static TypeAliasModelItem create(CodeModel *model);
+  static void clear(TypeAliasModelItem item);
 
 public:
   TypeInfo type() const;
