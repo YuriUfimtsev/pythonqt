@@ -348,6 +348,11 @@ void _CodeModelItem::setEndPosition(int line, int column)
 }
 
 // ---------------------------------------------------------------------------
+_ClassModelItem::~_ClassModelItem()
+{
+  qDeleteAll(_M_templateParameters);
+}
+
 QStringList _ClassModelItem::baseClasses() const
 {
   return _M_baseClasses;
@@ -402,12 +407,12 @@ void _ClassModelItem::addPropertyDeclaration(const QString &propertyDeclaration)
 // ---------------------------------------------------------------------------
 _ScopeModelItem::~_ScopeModelItem()
 {
-    qDebug() << "1!!!!!!!!!!!!";
-    for (auto&& alias: _M_typeAliases.values())
-    {
-        _TypeAliasModelItem::clear(alias);
-        delete alias;
-    }
+    qDeleteAll(_M_functions);
+    qDeleteAll(_M_typeAliases);
+    // qDeleteAll(_M_classes); same objects with different names in the hash table
+    // qDeleteAll(_M_functionDefinitions); OR Comment _m_functions deletion
+    qDeleteAll(_M_enums);
+    qDeleteAll(_M_variables);
 }
 
 FunctionModelItem _ScopeModelItem::declaredFunction(FunctionModelItem item)
@@ -463,8 +468,8 @@ void _ScopeModelItem::addClass(ClassModelItem item)
  QString name = item->name();
  int idx = name.indexOf("<");
  if (idx > 0)
-     _M_classes.insert(name.left(idx), item);
-  _M_classes.insert(name, item);
+     _M_classes.insert(name.left(idx), item); // problem to _M_classes deletion in ~_ScopeModelItem
+  _M_classes.insert(name, item); //
 }
 
 void _ScopeModelItem::addFunction(FunctionModelItem item)
@@ -630,6 +635,11 @@ void _ArgumentModelItem::setDefaultValue(bool defaultValue)
 }
 
 // ---------------------------------------------------------------------------
+_FunctionModelItem::~_FunctionModelItem()
+{
+    qDeleteAll(_M_arguments);
+}
+
 bool _FunctionModelItem::isSimilar(FunctionModelItem other) const
 {
   if (name() != other->name())
@@ -888,13 +898,6 @@ TypeAliasModelItem _TypeAliasModelItem::create(CodeModel *model)
   return item;
 }
 
-void _TypeAliasModelItem::clear(TypeAliasModelItem item)
-{
-    auto pointer = item.load();
-    delete pointer;
-    item.store(nullptr);
-}
-
 EnumModelItem _EnumModelItem::create(CodeModel *model)
 {
   EnumModelItem item(new _EnumModelItem(model));
@@ -914,6 +917,11 @@ TemplateParameterModelItem _TemplateParameterModelItem::create(CodeModel *model)
 }
 
 // ---------------------------------------------------------------------------
+_MemberModelItem::~_MemberModelItem()
+{
+    qDeleteAll(_M_templateParameters);
+}
+
 TypeInfo _MemberModelItem::type() const
 {
   return _M_type;

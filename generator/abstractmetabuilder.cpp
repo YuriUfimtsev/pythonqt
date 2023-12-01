@@ -154,6 +154,7 @@ AbstractMetaBuilder::~AbstractMetaBuilder()
 {
     qDeleteAll(m_meta_classes);
     qDeleteAll(m_enums);
+    delete m_dom;
 }
 
 void AbstractMetaBuilder::checkFunctionModifications()
@@ -699,9 +700,7 @@ AbstractMetaClass *AbstractMetaBuilder::traverseNamespace(NamespaceModelItem nam
     m_current_class = 0;
 
 
-    auto scope = popScope();
-    delete scope;
-    //////
+    popScope();
     m_namespace_prefix = currentScope()->qualifiedName().join("::");
 
     if (!type->include().isValid()) {

@@ -350,6 +350,8 @@ public:
   static ClassModelItem create(CodeModel *model);
 
 public:
+  virtual ~_ClassModelItem();
+
   QStringList baseClasses() const;
 
   void setBaseClasses(const QStringList &baseClasses);
@@ -470,6 +472,8 @@ class _MemberModelItem: public _CodeModelItem
 public:
   DECLARE_MODEL_NODE(Member)
 
+  virtual ~_MemberModelItem();
+
   bool isConstant() const;
   void setConstant(bool isConstant);
 
@@ -547,6 +551,8 @@ public:
   static FunctionModelItem create(CodeModel *model);
 
 public:
+  virtual ~_FunctionModelItem();
+
   ArgumentList arguments() const;
 
   void addArgument(ArgumentModelItem item);
