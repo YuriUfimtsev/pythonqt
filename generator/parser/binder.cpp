@@ -321,7 +321,7 @@ void Binder::declare_symbol(SimpleDeclarationAST *node, InitDeclaratorAST *init_
       // ... and the signature
       foreach (DeclaratorCompiler::Parameter p, decl_cc.parameters())
         {
-          ArgumentModelItem arg = model()->create<ArgumentModelItem>();
+          ArgumentModelItem arg = model()->create<ArgumentModelItem>(); ////
           arg->setType(qualifyType(p.type, _M_context));
           arg->setName(p.name);
           arg->setDefaultValue(p.defaultValue);
@@ -331,7 +331,7 @@ void Binder::declare_symbol(SimpleDeclarationAST *node, InitDeclaratorAST *init_
         }
 
       fun->setScope(symbolScope->qualifiedName());
-      symbolScope->addFunction(fun);
+      symbolScope->addFunction(fun); /////
     }
   else
     {
