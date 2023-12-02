@@ -154,7 +154,8 @@ AbstractMetaBuilder::~AbstractMetaBuilder()
 {
     qDeleteAll(m_meta_classes);
     qDeleteAll(m_enums);
-    delete m_dom;
+    // delete m_dom;
+    qDeleteAll(m_scopes);
 }
 
 void AbstractMetaBuilder::checkFunctionModifications()
