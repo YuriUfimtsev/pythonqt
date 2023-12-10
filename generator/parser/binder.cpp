@@ -324,7 +324,7 @@ void Binder::declare_symbol(SimpleDeclarationAST *node, InitDeclaratorAST *init_
       // ... and the signature
       foreach (DeclaratorCompiler::Parameter p, decl_cc.parameters())
         {
-          ArgumentModelItem arg = model()->create<ArgumentModelItem>(); ////
+          ArgumentModelItem arg = model()->create<ArgumentModelItem>();
           arg->setType(qualifyType(p.type, _M_context));
           arg->setName(p.name);
           arg->setDefaultValue(p.defaultValue);
@@ -334,7 +334,7 @@ void Binder::declare_symbol(SimpleDeclarationAST *node, InitDeclaratorAST *init_
         }
 
       fun->setScope(symbolScope->qualifiedName());
-      symbolScope->addFunction(fun); /////
+      symbolScope->addFunction(fun);
     }
   else
     {
@@ -503,7 +503,7 @@ void Binder::visitFunctionDefinition(FunctionDefinitionAST *node)
   // try to find a function declaration for this definition..
   if (! declared)
     {
-      functionScope->addFunction(prototype); ////////problem
+      functionScope->addFunction(prototype);
     }
   else
     {
@@ -650,7 +650,7 @@ void Binder::visitTypedef(TypedefAST *node)
       CodeModelFinder finder(model(), this);
       ScopeModelItem typedefScope = finder.resolveScope(declarator->id, scope);
 
-      TypeAliasModelItem typeAlias = model ()->create<TypeAliasModelItem> (); // UNKNOWN LEAK
+      TypeAliasModelItem typeAlias = model ()->create<TypeAliasModelItem> ();
       updateItemPosition (typeAlias->toItem (), node);
       typeAlias->setName (alias_name);
       typeAlias->setType (qualifyType (typeInfo, currentScope ()->qualifiedName ()));

@@ -41,7 +41,6 @@
 
 
 #include "codemodel.h"
-#include <QDebug>
 
 // ---------------------------------------------------------------------------
 CodeModel::CodeModel()
@@ -406,8 +405,6 @@ _ScopeModelItem::~_ScopeModelItem()
 {
     qDeleteAll(_M_functions);
     qDeleteAll(_M_typeAliases);
-    // qDeleteAll(_M_classes); same objects with different names in the hash table
-    // qDeleteAll(_M_functionDefinitions); OR Comment _m_functions deletion
     qDeleteAll(_M_enums);
     qDeleteAll(_M_variables);
 }
@@ -465,8 +462,8 @@ void _ScopeModelItem::addClass(ClassModelItem item)
  QString name = item->name();
  int idx = name.indexOf("<");
  if (idx > 0)
-     _M_classes.insert(name.left(idx), item); // problem to _M_classes deletion in ~_ScopeModelItem
-  _M_classes.insert(name, item); //
+     _M_classes.insert(name.left(idx), item);
+  _M_classes.insert(name, item);
 }
 
 void _ScopeModelItem::addFunction(FunctionModelItem item)
@@ -483,20 +480,20 @@ void _ScopeModelItem::addVariable(VariableModelItem item)
 {
   auto name = item->name();
   if (_M_variables.contains(name))
-  {
+    {
       delete _M_variables.value(name);
-  }
-  _M_variables.insert(item->name(), item);
+    }
+  _M_variables.insert(name, item);
 }
 
 void _ScopeModelItem::addTypeAlias(TypeAliasModelItem item)
 {
-    auto name = item->name();
-    if (_M_typeAliases.contains(name))
+  auto name = item->name();
+  if (_M_typeAliases.contains(name))
     {
-        delete _M_typeAliases.value(name);
+      delete _M_typeAliases.value(name);
     }
-  _M_typeAliases.insert(item->name(), item);
+  _M_typeAliases.insert(name, item);
 }
 
 void _ScopeModelItem::addEnum(EnumModelItem item)
@@ -599,6 +596,11 @@ FunctionDefinitionList _ScopeModelItem::findFunctionDefinitions(const QString &n
 }
 
 // ---------------------------------------------------------------------------
+_NamespaceModelItem::~_NamespaceModelItem()
+{
+  qDeleteAll(_M_namespaces);
+}
+
 NamespaceList _NamespaceModelItem::namespaces() const
 {
   return _M_namespaces.values();
@@ -793,6 +795,11 @@ void _TypeAliasModelItem::setType(const TypeInfo &type)
 }
 
 // ---------------------------------------------------------------------------
+_EnumModelItem::~_EnumModelItem()
+{
+  qDeleteAll(_M_enumerators);
+}
+
 CodeModel::AccessPolicy _EnumModelItem::accessPolicy() const
 {
   return _M_accessPolicy;
