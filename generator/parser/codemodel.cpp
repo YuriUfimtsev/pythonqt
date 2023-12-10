@@ -260,7 +260,6 @@ _CodeModelItem::_CodeModelItem(CodeModel *model, int kind)
 
 _CodeModelItem::~_CodeModelItem()
 {
-    //delete _M_model;
 }
 
 CodeModelItem _CodeModelItem::toItem() const
@@ -484,11 +483,21 @@ void _ScopeModelItem::addFunctionDefinition(FunctionDefinitionModelItem item)
 
 void _ScopeModelItem::addVariable(VariableModelItem item)
 {
+  auto name = item->name();
+  if (_M_variables.contains(name))
+  {
+      delete _M_variables.value(name);
+  }
   _M_variables.insert(item->name(), item);
 }
 
 void _ScopeModelItem::addTypeAlias(TypeAliasModelItem item)
 {
+    auto name = item->name();
+    if (_M_typeAliases.contains(name))
+    {
+        delete _M_typeAliases.value(name);
+    }
   _M_typeAliases.insert(item->name(), item);
 }
 

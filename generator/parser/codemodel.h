@@ -399,6 +399,7 @@ public:
   static NamespaceModelItem create(CodeModel *model);
 
 public:
+  virtual ~_NamespaceModelItem() { qDeleteAll(_M_namespaces); }
   NamespaceList namespaces() const;
 
   void addNamespace(NamespaceModelItem item);
@@ -683,6 +684,8 @@ public:
   static EnumModelItem create(CodeModel *model);
 
 public:
+  ~_EnumModelItem() { qDeleteAll(_M_enumerators); }
+
   CodeModel::AccessPolicy accessPolicy() const;
   void setAccessPolicy(CodeModel::AccessPolicy accessPolicy);
 
