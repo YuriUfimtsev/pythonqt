@@ -278,7 +278,6 @@ public:
   DECLARE_MODEL_NODE(Scope)
 
   static ScopeModelItem create(CodeModel *model);
-  // virtual ~_ScopeModelItem();
 
 public:
   ClassList classes() const;
