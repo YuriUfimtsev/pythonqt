@@ -398,7 +398,7 @@ public:
   static NamespaceModelItem create(CodeModel *model);
 
 public:
-  virtual ~_NamespaceModelItem() { qDeleteAll(_M_namespaces); }
+  virtual ~_NamespaceModelItem();
   NamespaceList namespaces() const;
 
   void addNamespace(NamespaceModelItem item);
@@ -406,7 +406,7 @@ public:
 
   NamespaceModelItem findNamespace(const QString &name) const;
 
-  inline QHash<QString, NamespaceModelItem> namespaceMap() const { return _M_namespaces; };
+  inline QHash<QString, NamespaceModelItem> namespaceMap() const { return _M_namespaces; }
 
 protected:
   _NamespaceModelItem(CodeModel *model, int kind = __node_kind)
@@ -657,7 +657,6 @@ public:
   DECLARE_MODEL_NODE(TypeAlias)
 
   static TypeAliasModelItem create(CodeModel *model);
-  static void clear(TypeAliasModelItem item);
 
 public:
   TypeInfo type() const;
@@ -683,7 +682,7 @@ public:
   static EnumModelItem create(CodeModel *model);
 
 public:
-  ~_EnumModelItem() { qDeleteAll(_M_enumerators); }
+  virtual ~_EnumModelItem();
 
   CodeModel::AccessPolicy accessPolicy() const;
   void setAccessPolicy(CodeModel::AccessPolicy accessPolicy);
