@@ -933,7 +933,7 @@ TemplateParameterModelItem _TemplateParameterModelItem::create(CodeModel *model)
 // ---------------------------------------------------------------------------
 _MemberModelItem::~_MemberModelItem()
 {
-    qDeleteAll(_M_templateParameters);
+    //qDeleteAll(_M_templateParameters);
 }
 
 TypeInfo _MemberModelItem::type() const
