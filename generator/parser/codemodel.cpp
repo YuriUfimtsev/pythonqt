@@ -598,7 +598,7 @@ FunctionDefinitionList _ScopeModelItem::findFunctionDefinitions(const QString &n
 // ---------------------------------------------------------------------------
 _NamespaceModelItem::~_NamespaceModelItem()
 {
-  qDeleteAll(_M_namespaces);
+  //qDeleteAll(_M_namespaces);
 }
 
 NamespaceList _NamespaceModelItem::namespaces() const

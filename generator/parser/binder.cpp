@@ -75,9 +75,9 @@ Binder::Binder(CodeModel *__model, LocationManager &__location, Control *__contr
 Binder::~Binder()
 {
   qDeleteAll(_M_current_template_parameters);
-  delete _M_current_file;
-  delete _M_current_class;
-  delete _M_current_namespace;
+  //delete _M_current_file;
+  //delete _M_current_class;
+  //delete _M_current_namespace;
 }
 
 FileModelItem Binder::run(AST *node)
@@ -86,7 +86,8 @@ FileModelItem Binder::run(AST *node)
   _M_current_access = CodeModel::Public;
 
   _M_current_file = model()->create<FileModelItem>();
-  updateItemPosition (_M_current_file->toItem(), node);
+  auto ptr = _M_current_file->toItem();
+  updateItemPosition (ptr, node);
   visit(node);
   FileModelItem result = _M_current_file;
 
@@ -651,12 +652,17 @@ void Binder::visitTypedef(TypedefAST *node)
       ScopeModelItem typedefScope = finder.resolveScope(declarator->id, scope);
 
       TypeAliasModelItem typeAlias = model ()->create<TypeAliasModelItem> ();
-      updateItemPosition (typeAlias->toItem (), node);
+      auto item = typeAlias->toItem();
+      updateItemPosition (item, node); // удаляем объект из-за временного удаляемого сразу QSharedPointer-а
       typeAlias->setName (alias_name);
-      typeAlias->setType (qualifyType (typeInfo, currentScope ()->qualifiedName ()));
-      typeAlias->setScope (typedefScope->qualifiedName());
+      auto tmp_1 = currentScope ();
+      auto tmp_2 = tmp_1 ->qualifiedName();
+      typeAlias->setType (qualifyType (typeInfo, tmp_2));
+      auto tmp_typedef_scope = typedefScope->qualifiedName();
+      typeAlias->setScope (tmp_typedef_scope);
       _M_qualified_types[typeAlias->qualifiedName().join(".")] = QString();
-      currentScope ()->addTypeAlias (typeAlias);
+      auto _scope = currentScope();
+      _scope->addTypeAlias (typeAlias);
     }
   while (it != end);
 }
