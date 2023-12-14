@@ -41,7 +41,6 @@
 
 
 #include "codemodel.h"
-#include <QSharedPointer>
 
 // ---------------------------------------------------------------------------
 CodeModel::CodeModel()
