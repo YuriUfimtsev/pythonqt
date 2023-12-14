@@ -74,7 +74,7 @@ Binder::Binder(CodeModel *__model, LocationManager &__location, Control *__contr
 
 Binder::~Binder()
 {
-  qDeleteAll(_M_current_template_parameters);
+  //qDeleteAll(_M_current_template_parameters);
   //delete _M_current_file;
   //delete _M_current_class;
   //delete _M_current_namespace;
@@ -358,7 +358,7 @@ void Binder::declare_symbol(SimpleDeclarationAST *node, InitDeclaratorAST *init_
         }
 
       var->setType(qualifyType(typeInfo, _M_context));
-      applyStorageSpecifiers(node->storage_specifiers, model_static_cast<MemberModelItem>(var));
+      applyStorageSpecifiers(node->storage_specifiers, var.staticCast<_MemberModelItem>());
 
       var->setScope(symbolScope->qualifiedName());
       symbolScope->addVariable(var);
@@ -377,7 +377,7 @@ void Binder::visitFunctionDefinition(FunctionDefinitionAST *node)
       // check if this function declaration is a "friend" function with implementation body.
       // In this case we modify the scope, and remove the "friend" flag later on.
       friendWithDefinition = true;
-      scope = model_static_cast<ScopeModelItem>(_M_current_file);
+      scope = _M_current_file.staticCast<_ScopeModelItem>();
     }
 
   InitDeclaratorAST *init_declarator = node->init_declarator;
@@ -456,12 +456,12 @@ void Binder::visitFunctionDefinition(FunctionDefinitionAST *node)
   _M_current_function->setException(exceptionSpecToString(declarator->exception_spec));
 
   applyStorageSpecifiers(node->storage_specifiers,
-                          model_static_cast<MemberModelItem>(_M_current_function));
+                          _M_current_function.staticCast<_MemberModelItem>());
   applyFunctionSpecifiers(node->function_specifiers,
-                          model_static_cast<FunctionModelItem>(_M_current_function));
+                          _M_current_function.staticCast<_FunctionModelItem>());
   if (node->init_declarator->declarator && node->init_declarator->declarator->_override) {
     //std::cout << unqualified_name.toLatin1().constData() << std::endl;
-    model_static_cast<FunctionModelItem>(_M_current_function)->setVirtual(true);
+    _M_current_function.staticCast<_FunctionModelItem>()->setVirtual(true);
   }
 
   if (friendWithDefinition)
@@ -498,7 +498,7 @@ void Binder::visitFunctionDefinition(FunctionDefinitionAST *node)
 
   functionScope->addFunctionDefinition(_M_current_function);
 
-  FunctionModelItem prototype = model_static_cast<FunctionModelItem>(_M_current_function);
+  FunctionModelItem prototype = _M_current_function.staticCast<_FunctionModelItem>();
   FunctionModelItem declared = functionScope->declaredFunction(prototype);
 
   // try to find a function declaration for this definition..
@@ -511,7 +511,7 @@ void Binder::visitFunctionDefinition(FunctionDefinitionAST *node)
       applyFunctionSpecifiers(node->function_specifiers, declared);
       if (node->init_declarator->declarator && node->init_declarator->declarator->_override) {
         //std::cout << unqualified_name.toLatin1().constData() << std::endl;
-        model_static_cast<FunctionModelItem>(_M_current_function)->setVirtual(true);
+        _M_current_function.staticCast<_FunctionModelItem>()->setVirtual(true);
       }
 
       // fix the function type and the access policy
@@ -698,7 +698,7 @@ void Binder::visitNamespace(NamespaceAST *node)
 
       _M_context.removeLast();
 
-      if (NamespaceModelItem ns = model_static_cast<NamespaceModelItem>(scope))
+      if (NamespaceModelItem ns = scope.staticCast<_NamespaceModelItem>())
         {
           ns->addNamespace(_M_current_namespace);
         }
@@ -1019,7 +1019,7 @@ TypeInfo Binder::qualifyType(const TypeInfo &type, const QStringList &context) c
         {
           CodeModelItem scope = model ()->findItem (context, _M_current_file);
 
-          if (ClassModelItem klass = model_dynamic_cast<ClassModelItem> (scope))
+          if (ClassModelItem klass = scope.dynamicCast<_ClassModelItem> ())
             {
               foreach (QString base, klass->baseClasses ())
                 {

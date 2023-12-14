@@ -100,7 +100,7 @@ CodeModelItem CodeModel::findItem(const QStringList &qualifiedName, CodeModelIte
     // ### Extend to look for members etc too.
     const QString &name = qualifiedName.at(i);
 
-    if (NamespaceModelItem ns = scope.staticCast<_NamespaceModelItem>())
+    if (NamespaceModelItem ns = scope.dynamicCast<_NamespaceModelItem>())
       {
         if (NamespaceModelItem tmp_ns = ns->findNamespace(name)) {
           scope = tmp_ns;
@@ -108,7 +108,7 @@ CodeModelItem CodeModel::findItem(const QStringList &qualifiedName, CodeModelIte
         }
       }
 
-    if (ScopeModelItem ss = scope.staticCast<_ScopeModelItem>())
+    if (ScopeModelItem ss = scope.dynamicCast<_ScopeModelItem>())
       {
         if (ClassModelItem cs = ss->findClass(name))
           {
@@ -170,7 +170,7 @@ TypeInfo TypeInfo::resolveType (TypeInfo const &__type, CodeModelItem __scope)
         otherType.setQualifiedName(__item->qualifiedName());
     }
 
-    if (TypeAliasModelItem __alias = model_dynamic_cast<TypeAliasModelItem> (__item))
+    if (TypeAliasModelItem __alias = __item.dynamicCast<_TypeAliasModelItem> ())
         return resolveType (TypeInfo::combine (__alias->type (), otherType), __scope);
 
     return otherType;
@@ -349,7 +349,7 @@ void _CodeModelItem::setEndPosition(int line, int column)
 // ---------------------------------------------------------------------------
 _ClassModelItem::~_ClassModelItem()
 {
-  qDeleteAll(_M_templateParameters);
+  //qDeleteAll(_M_templateParameters);
 }
 
 QStringList _ClassModelItem::baseClasses() const
@@ -645,7 +645,7 @@ void _ArgumentModelItem::setDefaultValue(bool defaultValue)
 // ---------------------------------------------------------------------------
 _FunctionModelItem::~_FunctionModelItem()
 {
-    qDeleteAll(_M_arguments);
+    //qDeleteAll(_M_arguments);
 }
 
 bool _FunctionModelItem::isSimilar(FunctionModelItem other) const

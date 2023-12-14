@@ -50,6 +50,8 @@
 AbstractMetaType::~AbstractMetaType()
 {
     delete m_original_template_type;
+    delete m_type_entry;
+    delete m_array_element_type;
 }
 
 AbstractMetaType *AbstractMetaType::copy() const

@@ -65,7 +65,7 @@ class _VariableModelItem;
 class _MemberModelItem;
 struct TypeInfo;
 
-typedef CodeModelPointer<_ArgumentModelItem> ArgumentModelItem;
+typedef QSharedPointer<_ArgumentModelItem> ArgumentModelItem;
 typedef QSharedPointer<_ClassModelItem> ClassModelItem;
 typedef QSharedPointer<_CodeModelItem> CodeModelItem;
 typedef QSharedPointer<_EnumModelItem> EnumModelItem;
@@ -75,7 +75,7 @@ typedef QSharedPointer<_FunctionDefinitionModelItem> FunctionDefinitionModelItem
 typedef QSharedPointer<_FunctionModelItem> FunctionModelItem;
 typedef QSharedPointer<_NamespaceModelItem> NamespaceModelItem;
 typedef QSharedPointer<_ScopeModelItem> ScopeModelItem;
-typedef CodeModelPointer<_TemplateParameterModelItem> TemplateParameterModelItem;
+typedef QSharedPointer<_TemplateParameterModelItem> TemplateParameterModelItem;
 typedef QSharedPointer<_TypeAliasModelItem> TypeAliasModelItem;
 typedef QSharedPointer<_VariableModelItem> VariableModelItem;
 typedef QSharedPointer<_MemberModelItem> MemberModelItem;

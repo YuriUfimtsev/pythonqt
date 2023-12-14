@@ -283,8 +283,8 @@ public:
 
     AbstractMetaType *copy() const;
 
-    const TypeEntry *typeEntry() const { return m_type_entry; }
-    void setTypeEntry(const TypeEntry *type) { m_type_entry = type; }
+    const TypeEntry::shared_pointer typeEntry() const { return m_type_entry; }
+    void setTypeEntry(const TypeEntry::shared_pointer type) { m_type_entry = type; }
 
     void setOriginalTypeDescription(const QString &otd) { m_original_type_description = otd; }
     QString originalTypeDescription() const { return m_original_type_description; }
@@ -293,7 +293,7 @@ public:
     const AbstractMetaType *originalTemplateType() const { return m_original_template_type; }
 
 private:
-    const TypeEntry *m_type_entry{};
+    const TypeEntry::shared_pointer m_type_entry{};
     QList <AbstractMetaType::shared_pointer> m_instantiations;
     QString m_package;
     QString m_original_type_description;
