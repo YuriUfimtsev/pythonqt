@@ -99,11 +99,11 @@ FileModelItem Binder::run(AST *node)
 ScopeModelItem Binder::currentScope() const
 {
   if (_M_current_class)
-    return model_static_cast<ScopeModelItem>(_M_current_class);
+    return _M_current_class.staticCast<_ScopeModelItem>();
   else if (_M_current_namespace)
-    return model_static_cast<ScopeModelItem>(_M_current_namespace);
+    return _M_current_namespace.staticCast<_ScopeModelItem>();
 
-  return model_static_cast<ScopeModelItem>(_M_current_file);
+  return _M_current_file.staticCast<_ScopeModelItem>();
 }
 
 TemplateParameterList Binder::changeTemplateParameters(TemplateParameterList templateParameters)
@@ -653,14 +653,15 @@ void Binder::visitTypedef(TypedefAST *node)
 
       TypeAliasModelItem typeAlias = model ()->create<TypeAliasModelItem> ();
       auto item = typeAlias->toItem();
-      updateItemPosition (item, node); // удаляем объект из-за временного удаляемого сразу QSharedPointer-а
-      typeAlias->setName (alias_name);
-      auto tmp_1 = currentScope ();
-      auto tmp_2 = tmp_1 ->qualifiedName();
-      typeAlias->setType (qualifyType (typeInfo, tmp_2));
-      auto tmp_typedef_scope = typedefScope->qualifiedName();
-      typeAlias->setScope (tmp_typedef_scope);
-      _M_qualified_types[typeAlias->qualifiedName().join(".")] = QString();
+      updateItemPosition (item, node); // новый SharedPointer,
+      // указывает на тот же объект, но очищает его после выполнения функции. Проблема.
+      //typeAlias->setName (alias_name);
+      //auto tmp_1 = currentScope ();
+      //auto tmp_2 = currentScope () ->qualifiedName();
+      //typeAlias->setType (qualifyType (typeInfo, tmp_2));
+      //auto tmp_typedef_scope = typedefScope->qualifiedName();
+      //typeAlias->setScope (tmp_typedef_scope);
+      //_M_qualified_types[typeAlias->qualifiedName().join(".")] = QString();
       auto _scope = currentScope();
       _scope->addTypeAlias (typeAlias);
     }

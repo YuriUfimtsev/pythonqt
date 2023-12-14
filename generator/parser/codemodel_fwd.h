@@ -76,7 +76,7 @@ typedef CodeModelPointer<_FunctionModelItem> FunctionModelItem;
 typedef QSharedPointer<_NamespaceModelItem> NamespaceModelItem;
 typedef QSharedPointer<_ScopeModelItem> ScopeModelItem;
 typedef CodeModelPointer<_TemplateParameterModelItem> TemplateParameterModelItem;
-typedef CodeModelPointer<_TypeAliasModelItem> TypeAliasModelItem;
+typedef QSharedPointer<_TypeAliasModelItem> TypeAliasModelItem;
 typedef CodeModelPointer<_VariableModelItem> VariableModelItem;
 typedef CodeModelPointer<_MemberModelItem> MemberModelItem;
 

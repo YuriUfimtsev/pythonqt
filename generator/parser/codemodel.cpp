@@ -404,7 +404,7 @@ void _ClassModelItem::addPropertyDeclaration(const QString &propertyDeclaration)
 _ScopeModelItem::~_ScopeModelItem()
 {
     qDeleteAll(_M_functions);
-    qDeleteAll(_M_typeAliases);
+    //qDeleteAll(_M_typeAliases);
     qDeleteAll(_M_enums);
     qDeleteAll(_M_variables);
 }
@@ -489,10 +489,6 @@ void _ScopeModelItem::addVariable(VariableModelItem item)
 void _ScopeModelItem::addTypeAlias(TypeAliasModelItem item)
 {
   auto name = item->name();
-  if (_M_typeAliases.contains(name))
-    {
-      delete _M_typeAliases.value(name);
-    }
   _M_typeAliases.insert(name, item);
 }
 
