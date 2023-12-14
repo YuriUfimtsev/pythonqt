@@ -154,7 +154,6 @@ AbstractMetaBuilder::~AbstractMetaBuilder()
 {
     qDeleteAll(m_meta_classes);
     qDeleteAll(m_enums);
-    //qDeleteAll(m_scopes);
 }
 
 void AbstractMetaBuilder::checkFunctionModifications()
@@ -1017,7 +1016,7 @@ AbstractMetaField *AbstractMetaBuilder::traverseField(VariableModelItem field, c
         ReportHandler::warning(QString("skipping field '%1::%2' with unmatched type '%3'")
                                .arg(m_current_class->name())
                                .arg(field_name)
-                               .arg(TypeInfo::resolveType(field_type, currentScope().staticCast<_CodeModelItem>()).qualifiedName().join("::")));
+                               .arg(TypeInfo::resolveType(field_type, currentScope()).qualifiedName().join("::")));
         delete meta_field;
         return 0;
     }

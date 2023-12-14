@@ -74,10 +74,6 @@ Binder::Binder(CodeModel *__model, LocationManager &__location, Control *__contr
 
 Binder::~Binder()
 {
-  //qDeleteAll(_M_current_template_parameters);
-  //delete _M_current_file;
-  //delete _M_current_class;
-  //delete _M_current_namespace;
 }
 
 FileModelItem Binder::run(AST *node)
@@ -86,8 +82,7 @@ FileModelItem Binder::run(AST *node)
   _M_current_access = CodeModel::Public;
 
   _M_current_file = model()->create<FileModelItem>();
-  auto ptr = _M_current_file;
-  updateItemPosition (ptr, node);
+  updateItemPosition (_M_current_file, node);
   visit(node);
   FileModelItem result = _M_current_file;
 
@@ -654,8 +649,8 @@ void Binder::visitTypedef(TypedefAST *node)
       TypeAliasModelItem typeAlias = model ()->create<TypeAliasModelItem> ();
       updateItemPosition (typeAlias, node);
       typeAlias->setName (alias_name);
-      typeAlias->setType (qualifyType (typeInfo, currentScope () ->qualifiedName ()));
-      typeAlias->setScope (typedefScope->qualifiedName ());
+      typeAlias->setType (qualifyType (typeInfo, currentScope ()->qualifiedName ()));
+      typeAlias->setScope (typedefScope->qualifiedName());
       _M_qualified_types[typeAlias->qualifiedName().join(".")] = QString();
       currentScope ()->addTypeAlias (typeAlias);
     }
@@ -675,8 +670,8 @@ void Binder::visitNamespace(NamespaceAST *node)
 
       QStringList qualified_name = scope->qualifiedName();
       qualified_name += name;
-      NamespaceModelItem ns = (_M_model->findItem(qualified_name,
-                                                                  _M_current_file)).staticCast<_NamespaceModelItem>();
+      NamespaceModelItem ns = (_M_model->findItem(qualified_name,_M_current_file))
+              .dynamicCast<_NamespaceModelItem>();
       if (!ns)
         {
           ns = _M_model->create<NamespaceModelItem>();

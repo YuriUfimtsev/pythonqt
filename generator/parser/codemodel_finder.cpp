@@ -55,7 +55,6 @@ CodeModelFinder::CodeModelFinder(CodeModel *model, Binder *binder)
 
 CodeModelFinder::~CodeModelFinder()
 {
-    //delete _M_current_scope;
 }
 
 ScopeModelItem CodeModelFinder::resolveScope(NameAST *name, ScopeModelItem scope)

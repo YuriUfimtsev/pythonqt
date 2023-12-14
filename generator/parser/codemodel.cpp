@@ -170,7 +170,7 @@ TypeInfo TypeInfo::resolveType (TypeInfo const &__type, CodeModelItem __scope)
         otherType.setQualifiedName(__item->qualifiedName());
     }
 
-    if (TypeAliasModelItem __alias = __item.dynamicCast<_TypeAliasModelItem> ())
+    if (TypeAliasModelItem __alias = __item.dynamicCast<_TypeAliasModelItem>())
         return resolveType (TypeInfo::combine (__alias->type (), otherType), __scope);
 
     return otherType;
@@ -260,13 +260,6 @@ _CodeModelItem::~_CodeModelItem()
 {
 }
 
-CodeModelItem _CodeModelItem::toItem() const
-{
-  //this->staticCast<CodeModelItem>();
-    const_cast<_CodeModelItem*>(this);
-  return CodeModelItem(const_cast<_CodeModelItem*>(this));
-}
-
 int _CodeModelItem::kind() const
 {
   return _M_kind;
@@ -349,7 +342,6 @@ void _CodeModelItem::setEndPosition(int line, int column)
 // ---------------------------------------------------------------------------
 _ClassModelItem::~_ClassModelItem()
 {
-  //qDeleteAll(_M_templateParameters);
 }
 
 QStringList _ClassModelItem::baseClasses() const
@@ -406,10 +398,6 @@ void _ClassModelItem::addPropertyDeclaration(const QString &propertyDeclaration)
 // ---------------------------------------------------------------------------
 _ScopeModelItem::~_ScopeModelItem()
 {
-    //qDeleteAll(_M_functions);
-    //qDeleteAll(_M_typeAliases);
-    //qDeleteAll(_M_enums);
-    //qDeleteAll(_M_variables);
 }
 
 FunctionModelItem _ScopeModelItem::declaredFunction(FunctionModelItem item)
@@ -481,18 +469,12 @@ void _ScopeModelItem::addFunctionDefinition(FunctionDefinitionModelItem item)
 
 void _ScopeModelItem::addVariable(VariableModelItem item)
 {
-  auto name = item->name();
-  if (_M_variables.contains(name))
-    {
-      //delete _M_variables.value(name);
-    }
-  _M_variables.insert(name, item);
+  _M_variables.insert(item->name(), item);
 }
 
 void _ScopeModelItem::addTypeAlias(TypeAliasModelItem item)
 {
-  auto name = item->name();
-  _M_typeAliases.insert(name, item);
+  _M_typeAliases.insert(item->name(), item);
 }
 
 void _ScopeModelItem::addEnum(EnumModelItem item)
@@ -597,7 +579,6 @@ FunctionDefinitionList _ScopeModelItem::findFunctionDefinitions(const QString &n
 // ---------------------------------------------------------------------------
 _NamespaceModelItem::~_NamespaceModelItem()
 {
-  //qDeleteAll(_M_namespaces);
 }
 
 NamespaceList _NamespaceModelItem::namespaces() const
@@ -645,7 +626,6 @@ void _ArgumentModelItem::setDefaultValue(bool defaultValue)
 // ---------------------------------------------------------------------------
 _FunctionModelItem::~_FunctionModelItem()
 {
-    //qDeleteAll(_M_arguments);
 }
 
 bool _FunctionModelItem::isSimilar(FunctionModelItem other) const
@@ -796,7 +776,6 @@ void _TypeAliasModelItem::setType(const TypeInfo &type)
 // ---------------------------------------------------------------------------
 _EnumModelItem::~_EnumModelItem()
 {
-  //qDeleteAll(_M_enumerators);
 }
 
 CodeModel::AccessPolicy _EnumModelItem::accessPolicy() const
