@@ -52,7 +52,6 @@
 #include <QtCore/QStringList>
 #include <QtCore/QVector>
 #include <QtCore/QSet>
-#include <QSharedPointer>
 
 #define DECLARE_MODEL_NODE(k) \
     enum { __node_kind = Kind_##k }; \

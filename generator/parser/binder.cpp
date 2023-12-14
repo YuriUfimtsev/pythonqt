@@ -86,7 +86,7 @@ FileModelItem Binder::run(AST *node)
   _M_current_access = CodeModel::Public;
 
   _M_current_file = model()->create<FileModelItem>();
-  auto ptr = _M_current_file->toItem();
+  auto ptr = _M_current_file;
   updateItemPosition (ptr, node);
   visit(node);
   FileModelItem result = _M_current_file;
@@ -283,7 +283,7 @@ void Binder::declare_symbol(SimpleDeclarationAST *node, InitDeclaratorAST *init_
       name_cc.run(id->unqualified_name);
 
       FunctionModelItem fun = model()->create<FunctionModelItem>();
-      updateItemPosition (fun->toItem(), node);
+      updateItemPosition (fun, node);
       fun->setAccessPolicy(_M_current_access);
       fun->setFunctionType(_M_current_function_type);
       fun->setName(name_cc.name());
@@ -294,7 +294,7 @@ void Binder::declare_symbol(SimpleDeclarationAST *node, InitDeclaratorAST *init_
       fun->setException(exceptionSpecToString(declarator->exception_spec));
 
       fun->setTemplateParameters(_M_current_template_parameters);
-      applyStorageSpecifiers(node->storage_specifiers, model_static_cast<MemberModelItem>(fun));
+      applyStorageSpecifiers(node->storage_specifiers, fun.staticCast<_MemberModelItem>());
       applyFunctionSpecifiers(node->function_specifiers, fun);
       
       if (const ListNode<InitDeclaratorAST*> *it = node->init_declarators)
@@ -340,7 +340,7 @@ void Binder::declare_symbol(SimpleDeclarationAST *node, InitDeclaratorAST *init_
   else
     {
       VariableModelItem var = model()->create<VariableModelItem>();
-      updateItemPosition (var->toItem(), node);
+      updateItemPosition (var, node);
       var->setTemplateParameters(_M_current_template_parameters);
       var->setAccessPolicy(_M_current_access);
       name_cc.run(id->unqualified_name);
@@ -438,7 +438,7 @@ void Binder::visitFunctionDefinition(FunctionDefinitionAST *node)
   FunctionDefinitionModelItem
     old = changeCurrentFunction(_M_model->create<FunctionDefinitionModelItem>());
   _M_current_function->setScope(functionScope->qualifiedName());
-  updateItemPosition (_M_current_function->toItem(), node);
+  updateItemPosition (_M_current_function, node);
 
   Q_ASSERT(declarator->id->unqualified_name != 0);
   name_cc.run(declarator->id->unqualified_name);
@@ -652,18 +652,12 @@ void Binder::visitTypedef(TypedefAST *node)
       ScopeModelItem typedefScope = finder.resolveScope(declarator->id, scope);
 
       TypeAliasModelItem typeAlias = model ()->create<TypeAliasModelItem> ();
-      auto item = typeAlias->toItem();
-      updateItemPosition (item, node); // новый SharedPointer,
-      // указывает на тот же объект, но очищает его после выполнения функции. Проблема.
-      //typeAlias->setName (alias_name);
-      //auto tmp_1 = currentScope ();
-      //auto tmp_2 = currentScope () ->qualifiedName();
-      //typeAlias->setType (qualifyType (typeInfo, tmp_2));
-      //auto tmp_typedef_scope = typedefScope->qualifiedName();
-      //typeAlias->setScope (tmp_typedef_scope);
-      //_M_qualified_types[typeAlias->qualifiedName().join(".")] = QString();
-      auto _scope = currentScope();
-      _scope->addTypeAlias (typeAlias);
+      updateItemPosition (typeAlias, node);
+      typeAlias->setName (alias_name);
+      typeAlias->setType (qualifyType (typeInfo, currentScope () ->qualifiedName ()));
+      typeAlias->setScope (typedefScope->qualifiedName ());
+      _M_qualified_types[typeAlias->qualifiedName().join(".")] = QString();
+      currentScope ()->addTypeAlias (typeAlias);
     }
   while (it != end);
 }
@@ -681,13 +675,12 @@ void Binder::visitNamespace(NamespaceAST *node)
 
       QStringList qualified_name = scope->qualifiedName();
       qualified_name += name;
-      NamespaceModelItem ns =
-        model_safe_cast<NamespaceModelItem>(_M_model->findItem(qualified_name,
-                                                                  _M_current_file->toItem()));
+      NamespaceModelItem ns = (_M_model->findItem(qualified_name,
+                                                                  _M_current_file)).staticCast<_NamespaceModelItem>();
       if (!ns)
         {
           ns = _M_model->create<NamespaceModelItem>();
-          updateItemPosition (ns->toItem(), node);
+          updateItemPosition (ns, node);
           ns->setName(name);
           ns->setScope(scope->qualifiedName());
         }
@@ -740,7 +733,7 @@ void Binder::visitClassSpecifier(ClassSpecifierAST *node)
   ScopeModelItem scope = currentScope();
 
   ClassModelItem old = changeCurrentClass(_M_model->create<ClassModelItem>());
-  updateItemPosition (_M_current_class->toItem(), node);
+  updateItemPosition (_M_current_class, node);
   _M_current_class->setName(class_cc.name());
 
   QStringList baseClasses = class_cc.baseClasses(); TypeInfo info;
@@ -820,7 +813,7 @@ void Binder::visitEnumSpecifier(EnumSpecifierAST *node)
   _M_current_enum = model()->create<EnumModelItem>();
   _M_current_enum->setAccessPolicy(_M_current_access);
   _M_current_enum->setEnumClass(node->is_enum_class);
-  updateItemPosition (_M_current_enum->toItem(), node);
+  updateItemPosition (_M_current_enum, node);
   _M_current_enum->setName(name);
   _M_current_enum->setScope(enumScope->qualifiedName());
 
@@ -848,7 +841,7 @@ void Binder::visitEnumerator(EnumeratorAST *node)
 {
   Q_ASSERT(_M_current_enum.data() != 0);
   EnumeratorModelItem e = model()->create<EnumeratorModelItem>();
-  updateItemPosition (e->toItem(), node);
+  updateItemPosition (e, node);
   e->setName(decode_symbol(node->id)->as_string());
 
   if (ExpressionAST *expr = node->expression)
@@ -1024,7 +1017,7 @@ TypeInfo Binder::qualifyType(const TypeInfo &type, const QStringList &context) c
         }
       else
         {
-          CodeModelItem scope = model ()->findItem (context, _M_current_file->toItem ());
+          CodeModelItem scope = model ()->findItem (context, _M_current_file);
 
           if (ClassModelItem klass = model_dynamic_cast<ClassModelItem> (scope))
             {

@@ -41,6 +41,7 @@
 
 
 #include "codemodel.h"
+#include <QSharedPointer>
 
 // ---------------------------------------------------------------------------
 CodeModel::CodeModel()
@@ -99,7 +100,7 @@ CodeModelItem CodeModel::findItem(const QStringList &qualifiedName, CodeModelIte
     // ### Extend to look for members etc too.
     const QString &name = qualifiedName.at(i);
 
-    if (NamespaceModelItem ns = model_dynamic_cast<NamespaceModelItem>(scope))
+    if (NamespaceModelItem ns = scope.staticCast<_NamespaceModelItem>())
       {
         if (NamespaceModelItem tmp_ns = ns->findNamespace(name)) {
           scope = tmp_ns;
@@ -107,7 +108,7 @@ CodeModelItem CodeModel::findItem(const QStringList &qualifiedName, CodeModelIte
         }
       }
 
-    if (ScopeModelItem ss = model_dynamic_cast<ScopeModelItem>(scope))
+    if (ScopeModelItem ss = scope.staticCast<_ScopeModelItem>())
       {
         if (ClassModelItem cs = ss->findClass(name))
           {
@@ -116,12 +117,12 @@ CodeModelItem CodeModel::findItem(const QStringList &qualifiedName, CodeModelIte
         else if (EnumModelItem es = ss->findEnum(name))
           {
             if (i == qualifiedName.size () - 1)
-              return es->toItem();
+              return es;
           }
         else if (TypeAliasModelItem tp = ss->findTypeAlias(name))
           {
             if (i == qualifiedName.size () - 1)
-              return tp->toItem ();
+              return tp;
           }
         else
           {
@@ -261,6 +262,8 @@ _CodeModelItem::~_CodeModelItem()
 
 CodeModelItem _CodeModelItem::toItem() const
 {
+  //this->staticCast<CodeModelItem>();
+    const_cast<_CodeModelItem*>(this);
   return CodeModelItem(const_cast<_CodeModelItem*>(this));
 }
 
@@ -403,10 +406,10 @@ void _ClassModelItem::addPropertyDeclaration(const QString &propertyDeclaration)
 // ---------------------------------------------------------------------------
 _ScopeModelItem::~_ScopeModelItem()
 {
-    qDeleteAll(_M_functions);
+    //qDeleteAll(_M_functions);
     //qDeleteAll(_M_typeAliases);
-    qDeleteAll(_M_enums);
-    qDeleteAll(_M_variables);
+    //qDeleteAll(_M_enums);
+    //qDeleteAll(_M_variables);
 }
 
 FunctionModelItem _ScopeModelItem::declaredFunction(FunctionModelItem item)
@@ -481,7 +484,7 @@ void _ScopeModelItem::addVariable(VariableModelItem item)
   auto name = item->name();
   if (_M_variables.contains(name))
     {
-      delete _M_variables.value(name);
+      //delete _M_variables.value(name);
     }
   _M_variables.insert(name, item);
 }
@@ -793,7 +796,7 @@ void _TypeAliasModelItem::setType(const TypeInfo &type)
 // ---------------------------------------------------------------------------
 _EnumModelItem::~_EnumModelItem()
 {
-  qDeleteAll(_M_enumerators);
+  //qDeleteAll(_M_enumerators);
 }
 
 CodeModel::AccessPolicy _EnumModelItem::accessPolicy() const

@@ -1017,7 +1017,7 @@ AbstractMetaField *AbstractMetaBuilder::traverseField(VariableModelItem field, c
         ReportHandler::warning(QString("skipping field '%1::%2' with unmatched type '%3'")
                                .arg(m_current_class->name())
                                .arg(field_name)
-                               .arg(TypeInfo::resolveType(field_type, currentScope()->toItem()).qualifiedName().join("::")));
+                               .arg(TypeInfo::resolveType(field_type, currentScope().staticCast<_CodeModelItem>()).qualifiedName().join("::")));
         delete meta_field;
         return 0;
     }
@@ -1548,7 +1548,7 @@ AbstractMetaType *AbstractMetaBuilder::translateType(const TypeInfo &_typei, boo
         // seemed non-trivial
         int i = m_scopes.size() - 1;
         while (i >= 0) {
-            typei = TypeInfo::resolveType(_typei, m_scopes.at(i--)->toItem());
+            typei = TypeInfo::resolveType(_typei, m_scopes.at(i--));
             if (typei.qualifiedName().join("::") != _typei.qualifiedName().join("::"))
                 break;
         }
@@ -1886,7 +1886,7 @@ bool AbstractMetaBuilder::isQObject(const QString &qualified_name)
 
 bool AbstractMetaBuilder::isEnum(const QStringList &qualified_name)
 {
-    CodeModelItem item = m_dom->model()->findItem(qualified_name, m_dom->toItem());
+    CodeModelItem item = m_dom->model()->findItem(qualified_name, m_dom);
     return item && item->kind() == _EnumModelItem::__node_kind;
 }
 
