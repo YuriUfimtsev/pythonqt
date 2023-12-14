@@ -259,6 +259,11 @@ _CodeModelItem::~_CodeModelItem()
 {
 }
 
+CodeModelItem _CodeModelItem::toItem() const
+{
+  return CodeModelItem(const_cast<_CodeModelItem*>(this));
+}
+
 int _CodeModelItem::kind() const
 {
   return _M_kind;
