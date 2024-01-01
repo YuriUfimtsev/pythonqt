@@ -55,7 +55,7 @@ bool ShellGenerator::shouldGenerate(const AbstractMetaClass *meta_class) const
     return ((cg & TypeEntry::GenerateCode) != 0);
 }
 
-void ShellGenerator::writeTypeInfo(QTextStream &s, const AbstractMetaType *type, Option options, TypeSystem::Ownership ownership)
+void ShellGenerator::writeTypeInfo(QTextStream &s, AbstractMetaType::const_shared_pointer type, Option options, TypeSystem::Ownership ownership)
 {
     if ((options & OriginalTypeDescription) && !type->originalTypeDescription().isEmpty()) {
         s << type->originalTypeDescription();
@@ -98,7 +98,7 @@ void ShellGenerator::writeTypeInfo(QTextStream &s, const AbstractMetaType *type,
         && (!te->isContainer() 
             || (static_cast<const ContainerTypeEntry *>(te))->type() != ContainerTypeEntry::StringListContainer)) {
         s << '<';
-        QList<AbstractMetaType *> args = type->instantiations();
+        auto &args = type->instantiations();
         bool nested_template = false;
         for (int i=0; i<args.size(); ++i) {
             if (i != 0)
@@ -229,7 +229,7 @@ void ShellGenerator::writeFunctionSignature(QTextStream &s,
                                           int numArguments)
 {
 // ### remove the implementor
-    AbstractMetaType *function_type = meta_function->type();
+    AbstractMetaType::shared_pointer function_type = meta_function->type();
 
 
     if ((option & SkipReturnType) == 0) {
