@@ -2,8 +2,7 @@ name: Check generated_cpp
 
 on:
   push:
-    branches: 
-       - master
+    branches:
   pull_request:
       
 defaults:
